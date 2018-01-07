@@ -1,0 +1,14 @@
+*.swp
+*.pyc
+*.retry
+__pycache__/
+
+env/
+.envrc
+
+.vscode/
+*.DS_Store
+.vagrant/
+temp/
+.idea
+*.orig

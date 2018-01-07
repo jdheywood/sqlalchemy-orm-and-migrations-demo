@@ -1,0 +1,130 @@
+---
+- name: demo server provision
+  hosts: demo
+  user: ubuntu
+  become: True
+  become_user: root
+  vars:
+    virtualenv_dir: "/home/demo/venv"
+  tasks:
+    - name: ensure apt cache is up to date
+      action: apt update_cache=yes
+
+    - name: ensure packages are installed
+      action: apt pkg={{ item }}
+      with_items:
+        # project minimal deps
+        - build-essential
+        - libxml2-dev
+        - libpq-dev
+        - git-core
+        - sudo
+        - supervisor
+        - python3
+        - python3-venv
+        - python3-dev
+        - expect
+        - python3-pip
+
+    # Install (pexpect) python package.
+    - pip: name=pexpect
+
+    - name: force locale to be en_US.utf8
+      action: copy src=locale dest=/etc/default/locale
+      notify:
+      - locale-gen
+
+    - name: Set timezone variables
+      copy: content='Europe/London'
+            dest=/etc/timezone
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+      notify:
+        - update timezone
+
+    - name: ensure database packages are installed
+      action: apt pkg={{ item }}
+      with_items:
+          - postgresql-9.5
+          - python3-psycopg2
+
+    - name: Make sure the cluster exists # the cluster setup may fail because the LC_ALL is not set
+      shell: LC_ALL=C pg_createcluster 9.5 main --start creates=/var/lib/postgresql/9.5/main
+
+    - name: Allow Host Connections to Postgres
+      become: True
+      become_user: root
+      lineinfile:
+        path: /etc/postgresql/9.5/main/postgresql.conf
+        regexp: '^#listen_addresses'
+        line: "listen_addresses = '*'"
+      when: build_env == 'development'
+      notify:
+      - restart postgresql
+
+    - name: ensure pg_hba.conf is correct
+      action: copy src=pg_hba.conf dest=/etc/postgresql/9.5/main/pg_hba.conf
+      notify:
+      - restart postgresql
+
+    - name: ensure postgres is started
+      action: service name=postgresql state=started
+
+    - name: create database user
+      become: True
+      become_user: postgres
+      postgresql_user: user=demo password=demo state=present role_attr_flags=CREATEDB
+
+    - name: create postgres database
+      become: True
+      become_user: postgres
+      postgresql_db: db=demo owner=demo encoding='UTF-8' template="template0" state=present
+
+    - name: ensure demo group exists
+      group:
+        name: demo
+        state: present
+
+    - name: create demo user
+      user:
+        name: demo
+        groups: demo,vagrant
+        password: "$alty-Mc5@lt-salt."
+        state: "present"
+
+    - name: Ensure demo home permissions
+      file: path="/home/demo" owner=demo group=demo state=directory mode=755
+      when: build_env == 'development'
+
+    - name: check if virtualenv already exists
+      stat: path={{virtualenv_dir}}
+      register: venv_dir
+
+    - name: create virtualenv when not exists
+      shell: python3 -m venv {{virtualenv_dir}}
+      when: venv_dir.stat.isdir is not defined
+
+    - name: ensure bash_profile is loaded
+      template: 
+        src: demo_bash_profile
+        dest: /home/demo/.bash_profile
+        owner: 'demo'
+        mode: 0644
+
+  handlers:
+    - name: locale-gen
+      shell: locale-gen
+
+    - name: restart postgresql
+      action: service name=postgresql state=restarted
+
+    - name: restart nginx
+      action: service name=nginx state=restarted
+
+    - name: restart supervisor
+      action: service name=supervisor state=restarted
+
+    - name: update timezone
+      command: dpkg-reconfigure --frontend noninteractive tzdata
