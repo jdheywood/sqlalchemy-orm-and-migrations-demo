@@ -15,3 +15,5 @@ temp/
 
 .bash_history
 .bash_profile
+
+venv/
