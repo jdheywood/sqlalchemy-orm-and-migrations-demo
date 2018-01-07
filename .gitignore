@@ -12,3 +12,6 @@ env/
 temp/
 .idea
 *.orig
+
+.bash_history
+.bash_profile
