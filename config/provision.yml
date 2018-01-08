@@ -91,27 +91,12 @@
       user:
         name: demo
         groups: demo,vagrant
-        password: "$alty-Mc5@lt-salt."
+        password: "password"
         state: "present"
 
     - name: Ensure demo home permissions
       file: path="/home/demo" owner=demo group=demo state=directory mode=755
       when: build_env == 'development'
-
-    - name: check if virtualenv already exists
-      stat: path={{virtualenv_dir}}
-      register: venv_dir
-
-    - name: create virtualenv when not exists
-      shell: python3 -m venv {{virtualenv_dir}}
-      when: venv_dir.stat.isdir is not defined
-
-    - name: ensure bash_profile is loaded
-      template: 
-        src: demo_bash_profile
-        dest: /home/demo/.bash_profile
-        owner: 'demo'
-        mode: 0644
 
   handlers:
     - name: locale-gen
@@ -128,3 +113,46 @@
 
     - name: update timezone
       command: dpkg-reconfigure --frontend noninteractive tzdata
+
+
+- name: demo software deploy
+  hosts: demo
+  become_user: demo
+  become: yes
+  vars:
+    virtualenv_dir: "/home/demo/venv"
+    app_config_dir: "/home/demo/config"
+    app_code_dir: "/home/demo/code"
+    demo_user: "demo"
+  tasks:
+    - name: check if virtualenv already exists
+      stat: path={{virtualenv_dir}}
+      register: venv_dir
+
+    - name: create virtualenv when not exists
+      shell: python3 -m venv {{virtualenv_dir}}
+      when: venv_dir.stat.isdir is not defined
+
+    - name: "install dependencies listed in {{requirements_file}}"
+      pip: requirements={{app_config_dir}}/{{requirements_file}} executable={{virtualenv_dir}}/bin/pip
+
+    - name: ensure demo user permissions
+      file:
+        path: /home/demo
+        state: directory
+        owner: '{{demo_user}}'
+        group: '{{demo_user}}'
+        recurse: yes
+
+    - name: ensure bash_profile is loaded
+      template: 
+        src: confs/vagrant_files/demo_bash_profile
+        dest: /home/demo/.bash_profile
+        owner: 'demo'
+        mode: 0644
+
+    - name: Check if there are pending migrations for demo db
+      shell: "{{ virtualenv_dir }}/bin/alembic --name {{demo_alembic_schema}} history | grep ' -> $(alembic --name {{demo_alembic_schema}} current 2>/dev/null)' | grep -q '(head)' || echo 'migrations need to be applied'"
+      args:
+          chdir: "{{ app_code_dir}}"
+      register: demo_migration_check

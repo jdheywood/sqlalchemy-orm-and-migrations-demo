@@ -4,5 +4,5 @@
 [demo:vars]
 ansible_python_interpreter=/usr/bin/python3
 build_env=development
-alembic_schema=development
-requirements_file=config/requirements.txt
+demo_alembic_schema=development
+requirements_file=requirements.txt
