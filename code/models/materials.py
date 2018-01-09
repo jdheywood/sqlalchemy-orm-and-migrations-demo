@@ -19,7 +19,7 @@ __all__ = ['Schleem']
 class Schleem(Base):
     __tablename__ = 'schleem'
 
-    id = Column(String)
+    id = Column(String, primary_key=True)
 
     height = Column(Integer)
     width = Column(Integer)
@@ -35,7 +35,7 @@ class Schleem(Base):
 class Dinglepop(Base):
     __tablename__ = 'dinglepop'
 
-    id = Column(String)
+    id = Column(String, primary_key=True)
 
     origin = Column(String)
     weight = Column(Integer)
@@ -48,9 +48,9 @@ class Dinglepop(Base):
 class Fleeb(Base):
     __tablename__ = 'fleeb'
 
-    id = Column(String)
+    id = Column(String, primary_key=True)
 
-    organic = Column(Boolean, default=true)
+    organic = Column(Boolean, default=True)
     picked_on = Column(TIMESTAMP)
 
     def __repr__(self):
@@ -61,7 +61,7 @@ class Fleeb(Base):
 class Chumble(Base):
     __tablename__ = 'chumble'
 
-    id = Column(String)
+    id = Column(String, primary_key=True)
 
     length = Column(Integer)
     diameter = Column(Integer)

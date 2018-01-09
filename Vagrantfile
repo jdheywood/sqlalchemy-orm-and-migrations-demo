@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :private_network, ip: "10.0.10.10"
   config.vm.network :forwarded_port, guest: 8080, host: 8888
-  config.vm.network :forwarded_port, guest: 5432, host: 5432
+  config.vm.network :forwarded_port, guest: 5432, host: 5433
 
   # config.vm.define "demo", primary: true do |demo|
   #    demo.vm.network :private_network, ip: "10.0.10.10"

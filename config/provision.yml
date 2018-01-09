@@ -73,12 +73,12 @@
     - name: create database user
       become: True
       become_user: postgres
-      postgresql_user: user=demo password=demo state=present role_attr_flags=CREATEDB
+      postgresql_user: user=vagrant password=vagrant state=present role_attr_flags=CREATEDB
 
     - name: create postgres database
       become: True
       become_user: postgres
-      postgresql_db: db=demo owner=demo encoding='UTF-8' template="template0" state=present
+      postgresql_db: db=demo owner=vagrant encoding='UTF-8' template="template0" state=present
 
   handlers:
     - name: locale-gen

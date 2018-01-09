@@ -18,11 +18,17 @@ Once the VM is up and running ssh in via
 vagrant ssh
 ```
 
-Then assume the demo user and activate the python virtual environment (note the hyphen, this is needed to activate the python venv)
+This will automatically assume the vagrant user and activate the python virtual environment courtesy of the demo_bash_profile copied over during provsioning
+
+Now you can connect to the postgres database using the following command
 
 ```
-sudo su - demo
+psql -d demo
 ```
+
+You'll be prompted for the password, as you can see in provision.yml this is 'vagrant', so type that in and you are away.
+
+
 
 Execute the existing database schema migrations to create tables in your new db
 
@@ -37,7 +43,24 @@ And then run the tests to see the ORM in action
 nosetests
 ```
 
-##### Further steps
+### Connecting to the demo database from your host machine
+
+For connecting to the postgres demo database from a client on your host machine you'll need the following details (note that you can always find these in Vagrantfile and provision.yml);
+
+```
+Host: localhost
+Port: 5433
+User: vagrant
+Password: vagrant
+Database: demo
+```
+
+Note that I've re-mapped the default port 5432 to prevent conflicts with other postgres databases you may have running, you can change this in the Vagrantfile if you so wish.
+
+
+
+
+### Further steps
 Create a new model and generate a migration
 
 ```
@@ -50,7 +73,7 @@ Run the migration against your database
 TODO
 ```
 
-You should see the new table ready for use, inspect either via psql in the VM or using your SQL client of choice (PSequel is a simple to use free tool)
+You should see the new table ready for use, inspect either via psql in the VM or using your SQL client of choice (PSequel is a simple to use free tool).
 
 Remove your table by migrating downwards one step in the version history
 
