@@ -5,6 +5,7 @@ from sqlalchemy import (
     Integer,
     String,
     TIMESTAMP,
+    ForeignKey,
 )
 
 from .base import Base
