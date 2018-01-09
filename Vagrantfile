@@ -26,13 +26,22 @@ Vagrant.configure("2") do |config|
      ansible.limit = "all"
   end
 
-  config.vm.define "demo", primary: true do |demo|
-      demo.vm.network :private_network, ip: "10.0.10.10"
-      demo.vm.network :forwarded_port, guest: 8080, host: 8088
-      demo.vm.network :forwarded_port, guest: 5432, host: 5432
+  # config.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "root"
 
-      demo.vm.synced_folder ".", "/home/demo", owner: demo, mount_options: ["dmode=775,fmode=664"]
-  end
+  config.vm.synced_folder ".", "/home/vagrant/host" 
+  # , owner: "vagrant", mount_options: ["dmode=775,fmode=664"]
+
+  config.vm.network :private_network, ip: "10.0.10.10"
+  config.vm.network :forwarded_port, guest: 8080, host: 8888
+  config.vm.network :forwarded_port, guest: 5432, host: 5432
+
+  # config.vm.define "demo", primary: true do |demo|
+  #    demo.vm.network :private_network, ip: "10.0.10.10"
+  #    demo.vm.network :forwarded_port, guest: 8080, host: 8088
+  #    demo.vm.network :forwarded_port, guest: 5432, host: 5433
+  #
+  #    demo.vm.synced_folder ".", "/home/vagrant", owner: vagrant, mount_options: ["dmode=775,fmode=664"]
+  # end
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs

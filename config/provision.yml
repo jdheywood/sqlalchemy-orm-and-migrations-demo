@@ -4,8 +4,6 @@
   user: ubuntu
   become: True
   become_user: root
-  vars:
-    virtualenv_dir: "/home/demo/venv"
   tasks:
     - name: ensure apt cache is up to date
       action: apt update_cache=yes
@@ -82,22 +80,6 @@
       become_user: postgres
       postgresql_db: db=demo owner=demo encoding='UTF-8' template="template0" state=present
 
-    - name: ensure demo group exists
-      group:
-        name: demo
-        state: present
-
-    - name: create demo user
-      user:
-        name: demo
-        groups: demo,vagrant
-        password: "password"
-        state: "present"
-
-    - name: Ensure demo home permissions
-      file: path="/home/demo" owner=demo group=demo state=directory mode=755
-      when: build_env == 'development'
-
   handlers:
     - name: locale-gen
       shell: locale-gen
@@ -117,13 +99,12 @@
 
 - name: demo software deploy
   hosts: demo
-  become_user: demo
-  become: yes
+  become_user: root
+  become: True
   vars:
-    virtualenv_dir: "/home/demo/venv"
-    app_config_dir: "/home/demo/config"
-    app_code_dir: "/home/demo/code"
-    demo_user: "demo"
+    virtualenv_dir: "/home/vagrant/venv"
+    app_config_dir: "/home/vagrant/host/config"
+    app_code_dir: "/home/vagrant/host/code"
   tasks:
     - name: check if virtualenv already exists
       stat: path={{virtualenv_dir}}
@@ -134,21 +115,15 @@
       when: venv_dir.stat.isdir is not defined
 
     - name: "install dependencies listed in {{requirements_file}}"
+      become: True
+      become_user: root
       pip: requirements={{app_config_dir}}/{{requirements_file}} executable={{virtualenv_dir}}/bin/pip
-
-    - name: ensure demo user permissions
-      file:
-        path: /home/demo
-        state: directory
-        owner: '{{demo_user}}'
-        group: '{{demo_user}}'
-        recurse: yes
 
     - name: ensure bash_profile is loaded
       template: 
-        src: confs/vagrant_files/demo_bash_profile
-        dest: /home/demo/.bash_profile
-        owner: 'demo'
+        src: ./demo_bash_profile
+        dest: /home/vagrant/.bash_profile
+        owner: 'vagrant'
         mode: 0644
 
     - name: Check if there are pending migrations for demo db
