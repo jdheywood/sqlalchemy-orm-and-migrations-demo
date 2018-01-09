@@ -19,29 +19,13 @@ Vagrant.configure("2") do |config|
   # See https://github.com/mitchellh/vagrant/issues/5005
   config.ssh.insert_key = false
 
+  # Run our custom provisioning here, we're using Ansible for this demo
   config.vm.provision "ansible" do |ansible|
      ansible.verbose = "v"
      ansible.playbook = "config/provision.yml"
      ansible.inventory_path = "config/inventory"
      ansible.limit = "all"
   end
-
-  # config.vm.synced_folder ".", "/vagrant", owner: "vagrant", group: "root"
-
-  config.vm.synced_folder ".", "/home/vagrant/host" 
-  # , owner: "vagrant", mount_options: ["dmode=775,fmode=664"]
-
-  config.vm.network :private_network, ip: "10.0.10.10"
-  config.vm.network :forwarded_port, guest: 8080, host: 8888
-  config.vm.network :forwarded_port, guest: 5432, host: 5433
-
-  # config.vm.define "demo", primary: true do |demo|
-  #    demo.vm.network :private_network, ip: "10.0.10.10"
-  #    demo.vm.network :forwarded_port, guest: 8080, host: 8088
-  #    demo.vm.network :forwarded_port, guest: 5432, host: 5433
-  #
-  #    demo.vm.synced_folder ".", "/home/vagrant", owner: vagrant, mount_options: ["dmode=775,fmode=664"]
-  # end
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -53,6 +37,9 @@ Vagrant.configure("2") do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
   # config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network :private_network, ip: "10.0.10.10"
+  config.vm.network :forwarded_port, guest: 8080, host: 8888
+  config.vm.network :forwarded_port, guest: 5432, host: 5433
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -72,7 +59,7 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder ".", "/home/vagrant/host" 
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
