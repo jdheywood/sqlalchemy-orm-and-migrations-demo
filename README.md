@@ -2,6 +2,9 @@
 ##### A Short Brighton Python Talk
 This repo consists of the presentation & codebase demonstated at Brighton Python
 
+The presentation can be found in the file: /presentation/index.html
+
+
 ### Running the code
 ##### Setup
 1. Clone this repo
@@ -83,7 +86,7 @@ vagrant provision
 Create a new model and generate a migration
 
 ```
-/* your new model code here, follow the examples in this repo if you are unsure */
+/* create a new model in the project, follow the examples in this repo if you are unsure */
 
 alembic -n development revision -m "Some meaningful description of the changes" --autogenerate
 ```
@@ -94,7 +97,7 @@ Run the migration against your database
 alembic -n development upgrade head
 ```
 
-You should see the new table ready for use, inspect either via psql in the VM or using your SQL client of choice (PSequel is a simple to use free tool).
+You should see the new table ready for use, inspect either via psql in the VM or using your SQL client of choice (PSequel)[http://www.psequel.com/] is a simple to use free tool for Mac, others are available.
 
 Remove your table by migrating downwards one step in the version history
 
@@ -117,4 +120,6 @@ alembic -n development history
 
 Further reading on alembic can be found here (Alembic)[http://alembic.zzzcomputing.com/en/latest/]
 
+
+Further reading on sqlalchemy can be found here (SQLAlchemy)[https://docs.sqlalchemy.org/en/latest/]
 
