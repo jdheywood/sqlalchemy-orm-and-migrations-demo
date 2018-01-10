@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from code import models
 
 
-class MaterialsTestCase(unittest.TestCase):
+class ProductsTestCase(unittest.TestCase):
     def setUp(self):
         connection_uri = "postgresql://vagrant:vagrant@localhost:5432/demo"
         self.engine = create_engine(connection_uri)
