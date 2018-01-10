@@ -18,6 +18,7 @@ class MaterialsTestCase(unittest.TestCase):
         Session = sessionmaker(bind=self.engine)
         self.session = Session()
 
+
     def test_querying_schleems(self):
         schleems = self.session.query(models.Schleem).all()
         self.assertGreater(len(schleems), 0)
