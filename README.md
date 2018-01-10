@@ -105,13 +105,19 @@ Remove your table by migrating downwards one step in the version history
 alembic -n development downgrade -1
 ```
 
-Review the current head of your database the migration versions via this command
+Review the current version of your database
+
+```
+alembic -n development current
+```
+
+Review the head(s) of your database migration versions via this command
 
 ```
 alembic -n development heads
 ```
 
-Review the version history of the versions
+Review the history of the versions applied to your database
 
 ```
 alembic -n development history
