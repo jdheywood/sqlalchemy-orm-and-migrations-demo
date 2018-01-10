@@ -27,10 +27,10 @@ class MaterialsTestCase(unittest.TestCase):
         dinglepops_initial_count = self.session.query(models.Dinglepop).count()
         self.assertGreater(dinglepops_initial_count, 0)
 
-        first_dinglepop = self.session.query(models.Dinglepop).first()
-        self.assertIsNotNone(first_dinglepop)
+        dinglepop = self.session.query(models.Dinglepop).filter_by(origin='Universe #48').one_or_none()
+        self.assertIsNotNone(dinglepop)
 
-        self.session.delete(first_dinglepop)
+        self.session.delete(dinglepop)
 
         dinglepops_new_count = self.session.query(models.Dinglepop).count()
         self.assertEqual((dinglepops_initial_count - 1), dinglepops_new_count)
