@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Brighton Py – ORM and Migrations Demo</title>
+
+		<meta name="description" content="A presentation about the use of ORMs and Databases as Code">
+		<meta name="author" content="James Heywood">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="css/demo.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+          <h3>Get your DB under source control for the love of all that is holy!</h3>
+          <br/><br/>
+					<h4>(A brief talk about ORMs and Data Migrations)</h4>
+					<p>
+						<small>By <a href="https://github.com/jdheywood">James Heywood</a> / <a href="http://twitter.com/jdheywood">@jdheywood</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Welcome</h2>
+				</section>
+
+				<!-- Example of nested vertical slides -->
+				<section>
+					<section>
+						<h2>About Me</h2>
+            <p class="fragment">Studied computing at Staffs Uni, (a long, long time ago)</p>
+            <p class="fragment">Have had a variety of roles since then including;</p>
+					</section>
+          <section>
+            <ul>
+              <li>
+                <ul>
+                  <li>Database development</li>
+                  <li>Desktop app development</li>
+                  <li>Project management</li>
+                  <li>Business analysis</li>
+                  <li>Web development</li>
+                  <li>Tech/team lead</li>
+                </ul>
+              </li>
+            </ul>
+					</section>
+					<section>
+						<ul>
+              <li>Tech experience includes<br/><br/>
+                <ul>
+                  <li>Db / SQL in many forms and dialects</li>
+                  <li>.NET</li>
+                  <li>JS</li>
+                  <li>bit of PHP</li>
+                  <li>Python</li>
+                </ul>
+              </li>
+              <br/>
+              <li>Currently leading the engineering team at Airfinity</li>
+            </ul>
+						<p><small><a href="https://www.airfinity.com">https://www.airfinity.com</a></small></p>
+					</section>
+				</section>
+
+				<section>
+          <section>
+            <h2>Source Control Your Database</h2>
+          </section>
+          <section>
+            <p>If your database is the foundation of your application, and your application code is under source control, then surely your database should be too right?</p>
+          </section>
+          <section>
+            <h3>Reasons for not having it under control</h3>            
+            <p class="fragment">Legacy code base, old habits die hard</p>
+            <p class="fragment">Lack of time, new feature > paying back tech debt</p>
+            <p class="fragment">Lack of appetite for rewrite from management</p>
+            <p class="fragment">Lack of experience in the development team</p>
+          </section>
+          <section>
+            <h3>Excuses, Excuses</h3>
+            <p>None of these should stop you, with a bit of will and minimal effort you can get your database schema under control, even if you take a DIY approach.</p>
+          </section>
+				</section>
+
+				<section>
+          <section>
+            <h3>MVP Database Versioning</h3>
+            <p class="fragment">Versioning your database, managing schema changes and using an ORM in your code all go hand in hand.</p>
+            <p class="fragment">However, at the most basic level all you really need is to know what shape your databae objects have now, 
+              and the ability to record changes to this over time.</p>
+          </section>
+          <section>
+            <h3>This can take the form of the following</h3>
+            <p class="fragment">A script or set of scripts defining every db object that exists right now.</p>
+            <p class="fragment">A record of the current 'version' of the database, held in the database itself.</p>
+            <p class="fragment">A set of planned changes, again as a script, that can be executed in your database.</p>
+          </section>
+          <section>
+            <h3>Then what?</h3>
+            <p class="fragment">When you run the next set of changes, add a record to the database version table and re-generate your baseline script</p>
+            <p class="fragment">Stick the baseline and changes in source control and you're good to go</p>
+            <p class="fragment">Wash, rinse, repeat (everybody!)</p>
+            <p class="fragment">Source controlled database schema changes FTW! Huzzah!</p>
+          </section>
+				</section>
+
+				<section>
+					<section>
+            <h3>A Better Way</h3>
+            <p class="fragment">The DIY approach can get you out of a sticky situation and help to introduce a more professional work ethic to your project</p>
+            <p class="fragment">But there are many tools out there to make this much easier for you.</p>
+					</section>
+				</section>
+
+				<section>
+          <section>
+	  				<h3>ORM</h3>
+            <p class="fragment">An Object Relation Mapper (ORM) is a way of representing your database tables as objects in the language of your application.</p>
+          </section>
+          <section>
+            <h4>ORMs provide many benefits over working directly with SQL, some of these are;</h4>
+            <p class="fragment">Conceptually simpler, makes development easier</p>
+            <p class="fragment">Saves manually creating boilerplate code</p>
+            <p class="fragment">Prevents the need to use in-line SQL, (security yo)</p>
+            <p class="fragment">Abstracts your data layer, increases portability/re-usability</p>
+            <p class="fragment">Allows for testing of your data access layer</p>
+            <p class="fragment">Facilitates code-first approach, migrations FTW!</p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>ORMs Are Essential</h3>
+            <p class="fragment">ORMs facilitate data migrations, enabling source control of your database</p>
+            <p class="fragment">Model objects are used to create SQL scripts that define your database structure</p>
+            <p class="fragment">At Airfinity we use the SQLAlchemy ORM and a data migration library called Alembic</p>
+            <p class="fragment">We can run a CLI command to create schema changes from code</p>
+            <p class="fragment">We can automate this command, as part of our CI pipeline</p>
+            <p class="fragment">No more worrying about manually migrating db changes</p>
+          </section>
+				</section>
+
+				<section>					
+					<h4>Demo</h4>
+					<p class="fragment">Enough chat, let's see some code</p>
+					<p class="fragment"><a href="https://github.com/Airfinitydev/orm-and-migrations-demo">https://github.com/Airfinitydev/orm-and-migrations-demo</a></p>
+				</section>
+
+				<section>
+          <h3>Points of note</h3>
+          <ul>
+            <li>
+              <ul>
+                <li>Setup</li>
+                <li>alembic.ini and env.py</li>
+                <li>Database</li>
+                <li>SQLAlchemy models</li>                
+                <li>Alembic versions</li>
+                <li>Current db version</li>
+                <li>Scripts</li>
+                <li>Tests</li>
+                <li>Linear db version history</li>
+              </ul>
+            </li>
+          </ul>
+				</section>
+
+        <section class="stretch">
+          <h3>Non-Trivial Query</h3>
+            <pre class="stretch">
+              <code class="python" data-trim contenteditable style="font-size: 15px;">
+
+                  ## SqlAlchemy ORM usage for non-trivial query
+
+                  Lets say you wanted to do something like this; 
+
+                  SELECT  c.name AS category_name, o.airfinity_score, 
+                          o.name AS organiser_name, oc.category_id, oc.organiser_id
+                  FROM 	  category c
+                          JOIN organiser_category oc ON c.id = oc.category_id
+                            JOIN organiser o ON oc.organiser_id = o.id
+                  WHERE   c.name != 'Unknown'
+                  ORDER BY c.name ASC, o.airfinity_score DESC, o.name ASC;
+                  
+                  There are several things going on in this query; 
+
+                  - Selecting a subset of fields, rather than whole entities
+                  
+                  - Joining across more than one table
+                  
+                  - Filtering based on a specific field
+                  
+                  - Ordering by multiple fields, with differing sort orders
+                  
+                  Whilst SqlAlchemy is powerful its documentation can be 'challenging', below is a working example of the equivalent query using the ORM.
+                  
+                  ```
+                  eg_organiser_categories = eg_session.query(
+                          eg.Category.name.label('category_name'), 
+                          eg.Organiser.airfinity_score, 
+                          eg.Organiser.name.label('organiser_name'), 
+                          eg.OrganiserCategory.category_id, 
+                          eg.OrganiserCategory.organiser_id)
+                  .select_from(eg.Category).join(eg.OrganiserCategory).join(eg.Organiser)
+                  .filter(eg.Category.name != 'Unknown')
+                  .order_by(eg.Category.name)
+                  .order_by(desc(eg.Organiser.airfinity_score))
+                  .order_by(eg.Organiser.name)
+                  .all()
+                  ```
+                  
+                  This does what it says on the tin, much like ronseal, but just in case you want a breakdown;
+
+                  - Firstly we pass a comma separated list of entity.fields to the query() method, 
+                    note the use of the .label() methods to rename output columns, 
+                    these can then be referred to when working with the results as you might expect (eg; result.category_name)
+
+                  - Then to force the JOINs to be applied in the order we want as per the SQL above 
+                    (left to right; Category, OrganiserCategory then Organiser) 
+                    we use the select_from() method to start then append .join() methods
+
+                  - The .join() methods rely on there being the proper relationships defined on the models, 
+                    specifically the foreign keys between these are used to determine the columns to JOIN on, 
+                    if this is not the case for your desired JOIN, 
+                    i.e you want to JOIN on different columns or you have multiple foreign keys in the direction of your JOINS 
+                    (such as with self-relationships or multiple relationships from 1 entity to a 2nd) 
+                    you will need to refer to this page for alternative JOIN syntax: 
+                    (http://docs.sqlalchemy.org/en/latest/orm/tutorial.html#querying-with-joins)
+
+                  - Next comes the filter_by(), fairly self-explanatory
+
+                  - Then the order_by() methods, note the use of desc() within the second order_by(), 
+                    the order in which you apply these order_by() methods dictates the sorting, same as the raw SQL
+
+                  - Finally .all() to execute and return all records
+                  
+                  Looking at that it seems obvious, but it took a bit of digging to figure out, enjoy!
+              </code>
+            </pre>
+        </section>
+
+        <section>
+          <section>
+            <h3>Never break the chain</h3>
+            <p class="fragment">Alembic creates a linear history of database schema versions, each version points to it's predecessor so that the versions form a chain.</p>
+            <p class="fragment">We can migrate our database schema up and down through the chain of versions at will, using the alembic CLI tool.</p>
+            <p class="fragment">We can also view the current version of the schema and the head version (latest version) at any time so we can find our position in the chain.</p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>Hydra</h3>
+            <p style="background-color:#fff" >
+              <img src="images/derpy-hydra.png" />
+            </p>
+          </section>
+          <section>
+            <h3>Common Scenario</h3>
+            <p style="background-color:#fff" >
+              <img src="images/forked-db-versions.png" />
+            </p>
+          </section>
+          <section>
+              <h3>Resolution</h3>
+              <p style="background-color:#fff" >
+                <img src="images/unforked-db-versions.png" />
+              </p>
+            </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>Unforking</h3>
+            <p class="fragment">Concurrent feature development from the same starting point will result in a fork in the chain</p>
+            <p class="fragment">When the changes are merged there will be two heads and alembic will not know which to apply.</p>
+            <p class="fragment">Up to you to manually resolve the issue, luckily this is trivial to fix.</p>
+            <p class="fragment">Identify the version numbers and bring the diverging paths in line by making one the downstream migration of the other.</p>
+            <p class="fragment">Voila your fork is removed and your history is linear again, long live the chain!</p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>Brief word about Django</h3>
+            <p class="fragment">Django's ORM numbers the migrations sequentially, which you may or may not like</p>
+            <p class="fragment">You can easily spot the forked migrations from the directory listing, not so with Alembic</p>
+            <p class="fragment">You have to rename files to adjust the chain of versions, rather than edit as with Alembic</p>
+            <p class="fragment">Whether this is better or worse than Alembic's approach is personal preference</p>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>ORMs Are Available in Many Flavours</h3>
+            <ul>
+              <li>
+                <ul>
+                  <li>Django - Python</li>
+                  <li>ActiveRecord - RoR</li>
+                  <li>Entity Framework - .NET</li>
+                  <li>Objection - Node/JS</li>
+                  <li>Hibernate - Java</li>
+                  <li>NHibernate - .NET</li>
+                  <li>Eloquent - PHP/Laravel</li>
+                  <li>+ many, many more...</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <h2>Questions?</h2>
+          <p class="fragment">...followed by shameless plugs</p>
+        </section>
+        <section>
+          <h3>Running an event?</h3>
+          <p>Speak to us or visit <a href="https://www.airfinity.com/">https://www.airfinity.com/</a></p>
+          <p>for your free sponsor match</p>
+        </section>
+        <section>
+          <h3>Thanks to our Hosts - DabApps</h3>
+          <p><a href="https://www.dabapps.com/">https://www.dabapps.com/</a></p>
+        </section>
+        <section>
+          <h3>BrightonPy UserGroup</h3>
+          <p><a href="http://www.brightonpy.org/">http://www.brightonpy.org/</a></p>
+          <p><small>Next meet up 15th February from 6PM - location TBC</small></p>
+          <p><small>Talk from Ewa Kabzinska on Python and Networks (the graph kind, rather than neural or internet etc ;-)</small></p>
+        </section>
+        <section>
+          <h3>Thank you</h3>
+        </section>
+			</div>
+			
+		</div>
+		<footer>
+		</footer>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
