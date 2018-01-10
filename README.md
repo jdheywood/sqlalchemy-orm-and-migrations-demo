@@ -97,7 +97,7 @@ Run the migration against your database
 alembic -n development upgrade head
 ```
 
-You should see the new table ready for use, inspect either via psql in the VM or using your SQL client of choice (PSequel is a simple to use free tool).
+You should see the new table ready for use, inspect either via psql in the VM or using your SQL client of choice (PSequel)[http://www.psequel.com/] is a simple to use free tool for Mac, others are available.
 
 Remove your table by migrating downwards one step in the version history
 
