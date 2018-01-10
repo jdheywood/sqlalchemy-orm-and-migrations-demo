@@ -12,35 +12,51 @@ Open a Terminal and navigate to the checked out folder.
 vagrant up
 ```
 
-Once the VM is up and running ssh in via
+Once the VM is up and running ssh in via;
 
 ```
 vagrant ssh
 ```
 
-This will automatically assume the vagrant user and activate the python virtual environment courtesy of the demo_bash_profile copied over during provsioning
+This will automatically assume the vagrant user and activate the python virtual environment courtesy of the demo_bash_profile copied over during provsioning.
 
-Now you can connect to the postgres database using the following command
+Now you can connect to the postgres database using the following command.
 
 ```
 psql -d demo
 ```
 
-You'll be prompted for the password, as you can see in provision.yml this is 'vagrant', so type that in and you are away.
+You'll be prompted for the password, as you can see in provision.yml this is 'vagrant', so type that in and you are away. 
+
+When you have had a look around exit via \q
 
 
-
-Execute the existing database schema migrations to create tables in your new db
+To execute the existing database schema migrations (& create tables in your new db) you'll need to run the following commands.
 
 ```
-cd code
+cd host/code
 alembic -n demo upgrade head
 ```
 
-And then run the tests to see the ORM in action
+Now you have a schema you'll need some data, so run the add_materials script
 
 ```
-nosetests
+PYTHONPATH=/home/vagrant/host/code python -m scripts.add_materials
+```
+
+This script uses the ORM to create data. Have a read through it to familiarise yourself with the main concepts; connection, engine, session, add & commit.
+
+Whilst we're discussing scripts, we also have a remove_materials script that, yep you've guessed it, removes the materials data. Should you wish to run this; 
+
+```
+PYTHONPATH=/home/vagrant/host/code python -m scripts.remove_materials
+```
+
+
+Once you have some data you can run the tests which demonstrate some more uses of the ORM via the command;
+
+```
+nosetests -v
 ```
 
 ### Connecting to the demo database from your host machine
@@ -55,8 +71,11 @@ Password: vagrant
 Database: demo
 ```
 
-Note that I've re-mapped the default port 5432 to prevent conflicts with other postgres databases you may have running, you can change this in the Vagrantfile if you so wish.
+Note that I've re-mapped the default port 5432 to 5433 in order to prevent conflicts with other postgres databases you may have running, you can change this in the Vagrantfile if you so wish. If you do you'll need to re-provision, so exit the VM and run the commend below to apply your changes.
 
+```
+vagrant provision
+```
 
 
 
@@ -64,13 +83,15 @@ Note that I've re-mapped the default port 5432 to prevent conflicts with other p
 Create a new model and generate a migration
 
 ```
-TODO
+/* your new model code here, follow the examples in this repo if you are unsure */
+
+alembic -n development revision -m "Some meaningful description of the changes" --autogenerate
 ```
 
 Run the migration against your database
 
 ```
-TODO
+alembic -n development upgrade head
 ```
 
 You should see the new table ready for use, inspect either via psql in the VM or using your SQL client of choice (PSequel is a simple to use free tool).
@@ -78,15 +99,22 @@ You should see the new table ready for use, inspect either via psql in the VM or
 Remove your table by migrating downwards one step in the version history
 
 ```
-TODO
+alembic -n development downgrade -1
 ```
 
-Review the head of the migration versions via this command
+Review the current head of your database the migration versions via this command
 
 ```
-TODO
+alembic -n development heads
 ```
 
-Further reading on alembic can be found here (Alembic)[www.alembic.com.probably]
+Review the version history of the versions
+
+```
+alembic -n development history
+```
+
+
+Further reading on alembic can be found here (Alembic)[http://alembic.zzzcomputing.com/en/latest/]
 
 
