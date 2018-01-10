@@ -13,9 +13,6 @@ from .base import Base
 __all__ = ['Schleem']
 
 
-# Schleem, dinglepop, fleeb juice, spit, and chumbles
-
-
 class Schleem(Base):
     __tablename__ = 'schleem'
 

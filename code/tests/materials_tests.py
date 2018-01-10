@@ -3,11 +3,13 @@
 import unittest
 import datetime
 from uuid import uuid4
-import models
+from code import models
 
 
 class MaterialsTestCase(unittest.TestCase):
     def test_querying_schleems(self):
+
+        shcleem = models.Schleem
 
         expected_value = None
 

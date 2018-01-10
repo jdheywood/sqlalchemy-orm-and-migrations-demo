@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql import func
 from sqlalchemy.sql.expression import text
 
-import code.models
+import models
 
 
 def _get_engine(conn_id, isolation_level=None):
@@ -27,14 +27,14 @@ def _get_session(engine):
 def seed_materials(session):
     # Add example models here
     schleem = models.Schleem(
-        id=uuid4(),
+        id=uuid.uuid4(),
         height=123,
         width=456,
         harvested_at=datetime.datetime.utcnow(),
         batch='098-qwerty'
     )
 
-    session.Add(schleem)
+    session.add(schleem)
 
     session.commit()
 
