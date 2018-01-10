@@ -119,8 +119,8 @@
           <section>
             <h3>MVP Database Versioning</h3>
             <p class="fragment">Versioning your database, managing schema changes and using an ORM in your code all go hand in hand.</p>
-            <p class="fragment">However, at the most basic level all you really need is to know what shape your databae objects have now, 
-              and the ability to record changes to this over time.</p>
+            <p class="fragment">However, at the most basic level all you really need is to know what shape your database objects have now, 
+              and the ability to record changes to this state over time.</p>
           </section>
           <section>
             <h3>This can take the form of the following</h3>
@@ -130,7 +130,7 @@
           </section>
           <section>
             <h3>Then what?</h3>
-            <p class="fragment">When you run the next set of changes, add a record to the database version table and re-generate your baseline script</p>
+            <p class="fragment">When you apply the next set of changes, add a record to the database version table and re-generate your baseline script</p>
             <p class="fragment">Stick the baseline and changes in source control and you're good to go</p>
             <p class="fragment">Wash, rinse, repeat (everybody!)</p>
             <p class="fragment">Source controlled database schema changes FTW! Huzzah!</p>
@@ -151,7 +151,7 @@
             <p class="fragment">An Object Relation Mapper (ORM) is a way of representing your database tables as objects in the language of your application.</p>
           </section>
           <section>
-            <h4>ORMs provide many benefits over working directly with SQL, some of these are;</h4>
+            <h3>Benefits include;</h3>
             <p class="fragment">Conceptually simpler, makes development easier</p>
             <p class="fragment">Saves manually creating boilerplate code</p>
             <p class="fragment">Prevents the need to use in-line SQL, (security yo)</p>
@@ -164,7 +164,7 @@
         <section>
           <section>
             <h3>ORMs Are Essential</h3>
-            <p class="fragment">ORMs facilitate data migrations, enabling source control of your database</p>
+            <p class="fragment">Because they facilitate data migrations, enabling source control of your database</p>
             <p class="fragment">Model objects are used to create SQL scripts that define your database structure</p>
             <p class="fragment">At Airfinity we use the SQLAlchemy ORM and a data migration library called Alembic</p>
             <p class="fragment">We can run a CLI command to create schema changes from code</p>
@@ -174,7 +174,7 @@
 				</section>
 
 				<section>					
-					<h4>Demo</h4>
+					<h3>Demo</h3>
 					<p class="fragment">Enough chat, let's see some code</p>
 					<p class="fragment"><a href="https://github.com/Airfinitydev/orm-and-migrations-demo">https://github.com/Airfinitydev/orm-and-migrations-demo</a></p>
 				</section>
@@ -278,6 +278,7 @@
             <p class="fragment">Alembic creates a linear history of database schema versions, each version points to it's predecessor so that the versions form a chain.</p>
             <p class="fragment">We can migrate our database schema up and down through the chain of versions at will, using the alembic CLI tool.</p>
             <p class="fragment">We can also view the current version of the schema and the head version (latest version) at any time so we can find our position in the chain.</p>
+            <p class="fragment">The latest version is the 'head' of the chain.</p>
           </section>
         </section>
 
