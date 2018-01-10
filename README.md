@@ -38,19 +38,25 @@ cd host/code
 alembic -n demo upgrade head
 ```
 
-Now you have a schema you'll need some data, so run the seed_materials script
+Now you have a schema you'll need some data, so run the add_materials script
 
 ```
-PYTHONPATH=/home/vagrant/host/code python -m scripts.seed_materials
+PYTHONPATH=/home/vagrant/host/code python -m scripts.add_materials
 ```
 
 This script uses the ORM to create data. Have a read through it to familiarise yourself with the main concepts; connection, engine, session, add & commit.
+
+Whilst we're discussing scripts, we also have a remove_materials script that, yep you've guessed it, removes the materials data. Should you wish to run this; 
+
+```
+PYTHONPATH=/home/vagrant/host/code python -m scripts.remove_materials
+```
 
 
 Once you have some data you can run the tests which demonstrate some more uses of the ORM via the command;
 
 ```
-nosetests
+nosetests -v
 ```
 
 ### Connecting to the demo database from your host machine

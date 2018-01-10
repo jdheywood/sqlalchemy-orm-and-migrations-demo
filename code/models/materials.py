@@ -10,7 +10,7 @@ from sqlalchemy import (
 from .base import Base
 
 
-__all__ = ['Schleem']
+__all__ = ['Schleem', 'Dinglepop', 'Fleeb', 'Chumble']
 
 
 class Schleem(Base):

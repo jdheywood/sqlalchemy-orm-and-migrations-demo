@@ -5,13 +5,11 @@ import datetime
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import func
-from sqlalchemy.sql.expression import text
 
 import models
 
 
-def _get_engine(conn_id, isolation_level=None):
+def _get_engine(isolation_level=None):
     connection_uri = "postgresql://vagrant:vagrant@localhost:5432/demo"
     if isolation_level:
         return create_engine(connection_uri, isolation_level=isolation_level)
@@ -24,28 +22,36 @@ def _get_session(engine):
     return Session()
 
 
-def seed_materials(session):
-    # Add example models here
-    schleem = models.Schleem(
-        id=uuid.uuid4(),
-        height=123,
-        width=456,
-        harvested_at=datetime.datetime.utcnow(),
-        batch='098-qwerty'
-    )
+def remove_schleem(session):
+    session.query(models.Schleem).delete()
+    session.commit()
 
-    session.add(schleem)
 
+def remove_dinglepops(session):
+    session.query(models.Dinglepop).delete()
+    session.commit()
+
+
+def remove_fleeb(session):
+    session.query(models.Fleeb).delete()
+    session.commit()
+
+
+def remove_chumbles(session):
+    session.query(models.Chumble).delete()
     session.commit()
 
 
 if __name__ == '__main__':
     print('Start...')
-    engine_main = _get_engine("demo")
+    engine_main = _get_engine()
     session_main = _get_session(engine_main)
 
-    print('Seeding materials data')
-    seed_materials(session_main)
+    print('Removing materials data')
+    remove_schleem(session_main)
+    remove_dinglepops(session_main)
+    remove_fleeb(session_main)
+    remove_chumbles(session_main)
 
     session_main.close()
 
