@@ -74,6 +74,22 @@ class MaterialsTestCase(unittest.TestCase):
         except Exception as ex:
             self.assertEqual(str(ex), 'Multiple rows were found for one_or_none()')
   
+    def test_executing_sql(self):
+        sql = "SELECT * FROM dinglepop"
+
+        # without fetching the data we will have a ResultProxy that can be accessed via 'yield per' (helps with data at scale)
+        # watchout for empty sets of data when doing this though as error messages are vague in these instances
+        dinglepops = self.session.execute(sql).fetchall()
+
+        self.assertGreater(len(dinglepops), 0)
+
+    def test_scalar(self):
+        sql = "SELECT COUNT(*) FROM dinglepop"
+
+        dinglepop_count = self.session.scalar(sql)
+
+        self.assertGreater(dinglepop_count, 0)
+
 
     def tearDown(self):
         self.session.close()

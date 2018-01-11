@@ -150,6 +150,25 @@
 	  				<h3>ORM</h3>
             <p class="fragment">An Object Relation Mapper (ORM) is a way of representing your database tables as objects in the language of your application.</p>
           </section>
+
+          <section>
+            <h3>ORMs Are Available in Many Flavours</h3>
+            <ul>
+              <li>
+                <ul>
+                  <li>Django - Python</li>
+                  <li>ActiveRecord - RoR</li>
+                  <li>Entity Framework - .NET</li>
+                  <li>Objection - Node/JS</li>
+                  <li>Hibernate - Java</li>
+                  <li>NHibernate - .NET</li>
+                  <li>Eloquent - PHP/Laravel</li>
+                  <li>+ many, many more...</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+
           <section>
             <h3>Benefits include;</h3>
             <p class="fragment">Conceptually simpler, makes development easier</p>
@@ -202,7 +221,6 @@
           <h3>Non-Trivial Query</h3>
             <pre class="stretch">
               <code class="python" data-trim contenteditable style="font-size: 15px;">
-
                   ## SqlAlchemy ORM usage for non-trivial query
 
                   Lets say you wanted to do something like this; 
@@ -242,32 +260,8 @@
                   .all()
                   ```
                   
-                  This does what it says on the tin, much like ronseal, but just in case you want a breakdown;
-
-                  - Firstly we pass a comma separated list of entity.fields to the query() method, 
-                    note the use of the .label() methods to rename output columns, 
-                    these can then be referred to when working with the results as you might expect (eg; result.category_name)
-
-                  - Then to force the JOINs to be applied in the order we want as per the SQL above 
-                    (left to right; Category, OrganiserCategory then Organiser) 
-                    we use the select_from() method to start then append .join() methods
-
-                  - The .join() methods rely on there being the proper relationships defined on the models, 
-                    specifically the foreign keys between these are used to determine the columns to JOIN on, 
-                    if this is not the case for your desired JOIN, 
-                    i.e you want to JOIN on different columns or you have multiple foreign keys in the direction of your JOINS 
-                    (such as with self-relationships or multiple relationships from 1 entity to a 2nd) 
-                    you will need to refer to this page for alternative JOIN syntax: 
-                    (http://docs.sqlalchemy.org/en/latest/orm/tutorial.html#querying-with-joins)
-
-                  - Next comes the filter_by(), fairly self-explanatory
-
-                  - Then the order_by() methods, note the use of desc() within the second order_by(), 
-                    the order in which you apply these order_by() methods dictates the sorting, same as the raw SQL
-
-                  - Finally .all() to execute and return all records
-                  
-                  Looking at that it seems obvious, but it took a bit of digging to figure out, enjoy!
+                  Joins are particularly fun, as there are many ways to describe there, 
+                  please refer to this page for alternative JOIN syntax: (http://docs.sqlalchemy.org/en/latest/orm/tutorial.html#querying-with-joins)
               </code>
             </pre>
         </section>
@@ -324,26 +318,6 @@
         </section>
 
         <section>
-          <section>
-            <h3>ORMs Are Available in Many Flavours</h3>
-            <ul>
-              <li>
-                <ul>
-                  <li>Django - Python</li>
-                  <li>ActiveRecord - RoR</li>
-                  <li>Entity Framework - .NET</li>
-                  <li>Objection - Node/JS</li>
-                  <li>Hibernate - Java</li>
-                  <li>NHibernate - .NET</li>
-                  <li>Eloquent - PHP/Laravel</li>
-                  <li>+ many, many more...</li>
-                </ul>
-              </li>
-            </ul>
-          </section>
-        </section>
-
-        <section>
           <h2>Questions?</h2>
           <p class="fragment">...followed by shameless plugs</p>
         </section>
@@ -357,13 +331,13 @@
           <p><a href="https://www.dabapps.com/">https://www.dabapps.com/</a></p>
         </section>
         <section>
+            <h3>Thank you</h3>
+        </section>
+        <section>
           <h3>BrightonPy UserGroup</h3>
           <p><a href="http://www.brightonpy.org/">http://www.brightonpy.org/</a></p>
           <p><small>Next meet up 15th February from 6PM - location TBC</small></p>
           <p><small>Talk from Ewa Kabzinska on Python and Networks (the graph kind, rather than neural or internet etc ;-)</small></p>
-        </section>
-        <section>
-          <h3>Thank you</h3>
         </section>
 			</div>
 			
