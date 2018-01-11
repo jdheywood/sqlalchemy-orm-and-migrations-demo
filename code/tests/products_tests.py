@@ -67,6 +67,16 @@ class ProductsTestCase(unittest.TestCase):
         chumble = self.session.query(models.Chumble).filter_by(id=plumbus.chumble_id)
         self.assertIsNotNone(chumble)
 
+    def test_joining_the_plumbus_to_the_schleem(self):
+        plumbus_and_schleem = self.session.query(
+            models.Plumbus.manufactured_on,
+            models.Schleem.batch)\
+            .join(models.Schleem)\
+            .first()
+
+        self.assertLess(plumbus_and_schleem.manufactured_on, datetime.datetime.utcnow())
+        self.assertIsNot(plumbus_and_schleem.batch, '')
+
 
     def tearDown(self):
         self.session.close()
